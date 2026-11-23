@@ -1,0 +1,10 @@
+# Зависимости движка (runtime). Lock: scripts/lock-engine.sh — точные версии, SHA-256,
+# только пакеты, опубликованные до даты отсечки (защита от свежих непроверенных релизов).
+# Модель считает ONNX Runtime: без torch и transformers среда — ~160 МБ вместо ~790 МБ.
+onnxruntime>=1.20,<2
+tokenizers>=0.21,<1
+numpy>=2,<3
+pymorphy3==2.0.6
+pymorphy3-dicts-ru
+lxml>=5,<7
+charset-normalizer>=3.4,<4

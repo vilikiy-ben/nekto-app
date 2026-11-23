@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Перед каждым коммитом: в репозиторий уходит только продукт (scripts/checks/repo-hygiene.py), автор назван явно,
+# а не собран из учётной записи Mac (scripts/checks/commit-identity.py).
+# Включается один раз в клоне: git config core.hooksPath .githooks
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+python3 "$ROOT/scripts/checks/commit-identity.py"
+python3 "$ROOT/scripts/checks/repo-hygiene.py"

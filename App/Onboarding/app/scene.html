@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<!--
+  Сцена онбординга внутри приложения (WKWebView, `App/Sources/Onboarding/SceneView.swift`).
+  Одна сцена на весь вид, без панели управления. Сцены, перо и плеер в бандл копируются при сборке
+  (`scripts/embed-onboarding.sh`).
+  Приложение отдаёт страницу по своей схеме `nekto-scene://scene/…` прямо из бандла: ES-модули с file:// WebKit не грузит
+  (у file:// нет источника, импорт блокируется как запрос к чужому). Сеть запрещена политикой ниже: скрипты — только
+  с той же схемы, больше ничего.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'">
+<title>Сцена</title>
+<style>
+  /* До первого кадра страница прозрачна: под ней окно приложения, белой вспышки нет. */
+  html, body { margin: 0; height: 100%; overflow: hidden; background: transparent; }
+  #stage { position: fixed; inset: 0; opacity: 0; transition: opacity 0.25s ease-out; }
+  #stage.shown { opacity: 1; }
+  canvas { position: absolute; display: block; transition: opacity 0.45s ease-in-out; }
+  * { -webkit-user-select: none; user-select: none; cursor: default; }
+</style>
+</head>
+<body>
+<div id="stage" aria-hidden="true"></div>
+<script type="module" src="scene.js"></script>
+</body>
+</html>

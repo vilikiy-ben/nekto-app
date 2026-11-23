@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Сообщение коммита без соавторства ИИ-ассистента (scripts/checks/commit-identity.py --message).
+set -euo pipefail
+exec python3 "$(git rev-parse --show-toplevel)/scripts/checks/commit-identity.py" --message "$1"

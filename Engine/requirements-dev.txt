@@ -1,0 +1,6 @@
+# Только для тестов: генерация файлов-образцов
+pytest==8.4.2
+openpyxl==3.1.5
+python-docx==1.2.0
+python-pptx==1.0.2
+pillow

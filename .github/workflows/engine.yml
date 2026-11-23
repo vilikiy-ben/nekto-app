@@ -1,0 +1,64 @@
+# Тесты движка на каждый pull request и пуш в main — тем же путём, что из чистого клона на Mac разработчика:
+# dev-runtime.sh → fetch-model.sh → test-engine.sh (песочница без сети, та же, что у приложения).
+#
+# Runner — macOS на Apple Silicon: движок работает в sandbox-exec, а uv закреплён под aarch64-apple-darwin.
+# В приватном репозитории минуты macOS расходуют квоту Actions с множителем 10, поэтому запуск — только при
+# изменениях, которые касаются движка; вручную — «Run workflow».
+name: engine
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Engine/**
+      - App/Resources/engine-sandbox.sb
+      - App/Sources/Setup/Manifest.swift
+      - scripts/*.sh
+      - scripts/checks/name-audit.py
+      - .github/workflows/engine.yml
+  pull_request:
+    paths:
+      - Engine/**
+      - App/Resources/engine-sandbox.sb
+      - App/Sources/Setup/Manifest.swift
+      - scripts/*.sh
+      - scripts/checks/name-audit.py
+      - .github/workflows/engine.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: engine-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Пакеты uv: ключ — lock движка и версия uv.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/devruntime/cache
+          key: uv-${{ hashFiles('Engine/requirements.lock', 'Engine/requirements-dev.txt', 'scripts/fetch-uv.sh') }}
+
+      # Модель 0,7 ГБ: ревизия и SHA-256 — в Manifest.swift; fetch-model.sh всё равно сверяет каждый файл.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: build/devruntime/model
+          key: model-${{ hashFiles('App/Sources/Setup/Manifest.swift') }}
+
+      - name: Среда движка
+        run: ./scripts/dev-runtime.sh
+      - name: Модель
+        run: ./scripts/fetch-model.sh
+      - name: Тесты движка в песочнице без сети
+        run: ./scripts/test-engine.sh
+      - name: Имя приложения согласовано
+        run: python3 scripts/checks/name-audit.py

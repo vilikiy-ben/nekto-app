@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+*.png    binary
+*.icns   binary
+
+# Картинки README и lock движка (scripts/lock-engine.sh) не правятся руками — в диффах GitHub свёрнуты.
+docs/assets/**                   linguist-generated
+Engine/requirements.lock         linguist-generated

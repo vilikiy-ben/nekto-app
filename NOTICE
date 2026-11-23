@@ -1,0 +1,16 @@
+Nekto
+Copyright 2026 vilikiy-ben
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Bundled with the app (Nekto.app/Contents/Helpers/uv):
+  uv 0.13.7 — Copyright (c) 2025 Astral Software Inc., MIT License
+  (https://github.com/astral-sh/uv; text in Nekto.app/Contents/Resources/Licenses/uv-LICENSE-MIT.txt,
+  in this repository — packaging/licenses/uv-LICENSE-MIT.txt).
+
+Downloaded on first launch, not redistributed with the app:
+  Python (python-build-standalone) — Python Software Foundation License
+  redmadrobot-rnd/rubert-base-pii-ner, ONNX export lockR/rubert-base-pii-ner-onnx — Apache License 2.0
+  Python packages pinned in Engine/requirements.lock, under their own licenses, among them
+  pymorphy3 (MIT) with pymorphy3-dicts-ru — OpenCorpora dictionary data under CC BY-SA 3.0
+  (https://opencorpora.org).

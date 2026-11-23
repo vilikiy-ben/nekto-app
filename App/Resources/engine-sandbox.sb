@@ -1,0 +1,5 @@
+(version 1)
+; Движок Nekto: всё как обычно, но без сети. Данные не могут покинуть машину.
+(allow default)
+(deny network-outbound (remote ip))
+(deny network-outbound (remote unix-socket (path-regex #"^/private/var/run/mDNSResponder")))
